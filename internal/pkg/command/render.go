@@ -20,7 +20,7 @@ func (r *RenderHandler) List(path string) error {
 		return err
 	}
 
-	t := template.New()
+	t := template.New("")
 	res := []string{}
 	for _, td := range d.templates {
 		s, err := t.Execute(td, d.values)

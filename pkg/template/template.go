@@ -7,21 +7,22 @@ import (
 )
 
 type Template struct {
-	config *Config
-	Name   string
+	config *config
+	name   string
 }
 
-func New() *Template {
+func New(n string, s ...ConfigSetter) *Template {
 	return &Template{
-		config: newConfig(),
+		config: NewConfig(s...),
+		name:   n,
 	}
 }
 
 func (t *Template) buildTemplater(data string) (*template.Template, error) {
-	return template.New(t.Name).
+	return template.New(t.name).
 		Delims(t.config.leftDelim, t.config.rightDelim).
-		// Funcs(extraFunctions).
-		// Option(r.config.Options...).
+		Funcs(t.config.extraFunctions).
+		Option(t.config.options...).
 		Parse(data)
 }
 
