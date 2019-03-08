@@ -2,8 +2,9 @@ package template
 
 import (
 	"bytes"
-	"fmt"
 	"text/template"
+
+	"github.com/pkg/errors"
 )
 
 type Template struct {
@@ -31,11 +32,7 @@ func (t *Template) Execute(data string, values interface{}) (string, error) {
 	templater, _ := t.buildTemplater(data)
 	err := templater.Execute(&buffer, values)
 	if err != nil {
-		retErr := err
-		if e, ok := err.(template.ExecError); ok {
-			retErr = fmt.Errorf("error (ExecError) evaluating the template named '%s': %s", e.Name, err)
-		}
-		return "", retErr
+		return "", errors.Wrap(err, "template execution failed")
 	}
 	return buffer.String(), nil
 }

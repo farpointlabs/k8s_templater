@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/farpointlabs/k8s_templater/pkg/template"
+	"github.com/pkg/errors"
 )
 
 type RenderHandler struct {
@@ -17,7 +18,7 @@ type RenderHandler struct {
 func (r *RenderHandler) List(path string) error {
 	d, err := getAllFiles(path)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to get files")
 	}
 
 	t := template.New("")
@@ -26,7 +27,7 @@ func (r *RenderHandler) List(path string) error {
 		s, err := t.Execute(td, d.values)
 
 		if err != nil {
-			return err
+			return errors.Wrap(err, "failed to execute template")
 		}
 
 		res = append(res, s)
