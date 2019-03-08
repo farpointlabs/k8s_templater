@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ad-configmap
+data:
+  myvalue: "Hello World"
+  drink: {{ .FavoriteDrink }}
